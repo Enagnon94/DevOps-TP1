@@ -1,0 +1,35 @@
+# docker-compose up
+# docker-compose down
+# TODO Choose order start
+
+version : '3.7'
+services :
+  backend :
+    build : 
+      context : ./JAVA/simple-api
+    container_name : cjavap
+    networks :
+      - reseau
+    depends_on :
+      - "database"
+  database :
+    build : 
+      context : ./BDD
+    container_name : pgsql
+    volumes:
+      - /home/enagnon/Bureau/dc:/var/lib/postgresql/data
+    networks :
+      - reseau
+  httpd :
+    build : 
+      context : ./HTTPSERVER
+    container_name : httpd
+    ports :
+      - "9999:80"
+    networks :
+      - reseau
+  #   depends_on :
+  #     - "backend"
+networks :
+  reseau:
+    driver: bridge
